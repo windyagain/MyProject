@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.BankMapper">
+    <!-- 解决表名与字段不匹配 -->
+    <resultMap type="Bank" id="bankResultMap">
+        <id property="bank_id" column="bank_id"/>
+        <result property="bank_name" column="bank_name"/>
+    </resultMap>
+    
+    <select id="getAllBanks" resultMap="bankResultMap">
+        select * from banks
+    </select>
+    <select id="getOneBank" resultMap="bankResultMap" parameterType="Bank">
+        select * from banks where bank_id=#{bank_id}
+    </select>
+    <insert id="insertBank" parameterType="Bank">
+    insert into banks (bank_name) values(
+    #{bank_name})
+    </insert>
+  <delete id="deleteByBankId" parameterType="java.lang.Integer" >
+    delete from banks
+    where bank_id = #{bank_id}
+  </delete>
+    
+</mapper>

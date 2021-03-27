@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.userCardMapper">
+    <!-- 解决表名与字段不匹配 -->
+    <resultMap type="UserCard" id="userCardResultMap">
+        <id property="user_card_id" column="user_card_id"/>
+        <result property="uid" column="uid"/>
+        <result property="card_id" column="card_id"/>
+    </resultMap>
+    
+    <select id="getAllList" resultMap="userCardResultMap">
+        select * from user_card
+    </select>
+
+    <select id="getUidByCardId" resultMap="userCardResultMap" parameterType="java.lang.Integer">
+        select * from user_card where card_id=#{card_id}
+    </select>
+    
+    <select id="getCardsByUid" resultMap="userCardResultMap" parameterType="java.lang.Integer">
+        select * from user_card where uid=#{uid}
+    </select>
+    <insert id="insertUserCard" parameterType="UserCard" >
+    insert into user_card (uid,card_id)
+    values (#{uid}, #{card_id})
+	</insert>
+    <delete id="deleteWithCardId" parameterType="java.lang.Integer" >
+    delete from user_card
+    where card_id = #{card_id}
+  </delete>
+</mapper>
