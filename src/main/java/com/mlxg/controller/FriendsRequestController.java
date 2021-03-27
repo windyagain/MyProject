@@ -28,8 +28,10 @@ public class FriendsRequestController {
         }
 
         int rows = friendsRequestService.addOneFriendsRequest(myUserId, friendUserName);
-        if (rows != 0) {
+        if (rows == 1) {
             return IWdzlJSONResult.ok("发送成功！");
+        } else if(rows == 2) {
+            return IWdzlJSONResult.errorMsg("用户已经是好友了！");
         } else {
             return IWdzlJSONResult.errorMsg("发送失败，请重新添加！");
         }
@@ -51,14 +53,17 @@ public class FriendsRequestController {
         if (StringUtils.isBlank(acceptUserId) || StringUtils.isBlank(sendUserId)) {
             return IWdzlJSONResult.errorMsg("访问非法!");
         }
-        if (operType.intValue() != 1) {
-            return IWdzlJSONResult.ok();
-        }
         Integer rows = 0;
-        try {
-            rows = friendsRequestService.operFriendRequest(acceptUserId, sendUserId);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (operType.intValue() != 1) {
+            // 删除该条记录
+            rows = friendsRequestService.deleteOneFriendRequest(acceptUserId, sendUserId);
+            return IWdzlJSONResult.ok();
+        } else {
+            try {
+                rows = friendsRequestService.operFriendRequest(acceptUserId, sendUserId);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         if (rows.intValue() != 1) {

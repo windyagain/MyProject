@@ -38,6 +38,11 @@ public class FriendsRequestServiceImpl implements FriendsRequestService {
         FriendsRequest friendsRequest = new FriendsRequest();
         friendsRequest.setSendUserId(myUserId);
         User friend = userMapper.selectByUserName(friendUserName);
+        // 查找是否已经是朋友
+        MyFriends myFriends = myFriendsMapper.selectOneFriend(myUserId, friend.getId());
+        if (myFriends != null) {
+            return 2;
+        }
         friendsRequest.setAcceptUserId(friend.getId());
         friendsRequest.setRequestDateTime(new Date());
         String insertId = sid.nextShort();
@@ -83,5 +88,13 @@ public class FriendsRequestServiceImpl implements FriendsRequestService {
         record.setStatus(0);
         friendsRequestMapper.updateStatus(record);
         return res1;
+    }
+
+    public Integer deleteOneFriendRequest(String acceptUserId, String sendUserId) {
+        FriendsRequest record = new FriendsRequest();
+        record.setAcceptUserId(acceptUserId);
+        record.setSendUserId(sendUserId);
+        Integer  rows = friendsRequestMapper.deleteByUniqueKey(record);
+        return rows;
     }
 }

@@ -25,6 +25,18 @@
   </select>
 
 
+  <select id="selectOneFriend" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from my_friends
+    where (my_user_id = #{myUserId,jdbcType=VARCHAR}
+    and my_friend_user_id = #{friendUserId,jdbcType=VARCHAR} )
+    or (
+    my_friend_user_id = #{myUserId,jdbcType=VARCHAR}
+    and my_user_id = #{friendUserId,jdbcType=VARCHAR}
+    )
+  </select>
+
   <select id="selectMyFriends" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List" />

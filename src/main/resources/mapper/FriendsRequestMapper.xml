@@ -27,6 +27,7 @@
   </select>
 
 
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from friends_request
     where id = #{id,jdbcType=VARCHAR}
@@ -97,5 +98,14 @@
     where send_user_id = #{sendUserId,jdbcType=VARCHAR}
     and accept_user_id = #{acceptUserId,jdbcType=VARCHAR}
   </update>
+
+
+
+
+  <delete id="deleteByUniqueKey" parameterType="com.mlxg.pojo.FriendsRequest" >
+    delete from friends_request
+    where send_user_id = #{sendUserId,jdbcType=VARCHAR}
+    and accept_user_id = #{acceptUserId,jdbcType=VARCHAR}
+  </delete>
 
 </mapper>

@@ -12,4 +12,6 @@ public interface FriendsRequestService {
     List<User> getFriendsRequest(String userId);
 
     Integer operFriendRequest(String acceptUserId, String sendUserId);
+
+    Integer deleteOneFriendRequest(String acceptUserId, String sendUserId);
 }

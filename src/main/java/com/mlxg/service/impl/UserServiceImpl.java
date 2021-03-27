@@ -1,7 +1,11 @@
 package com.mlxg.service.impl;
 
+import com.mlxg.enums.MsgSignFlagEnum;
+import com.mlxg.mapper.ChatMsgMapper;
 import com.mlxg.mapper.MyFriendsMapper;
 import com.mlxg.mapper.UserMapper;
+import com.mlxg.mapper.UserMapperCustom;
+import com.mlxg.netty.ChatMsg;
 import com.mlxg.pojo.MyFriends;
 import com.mlxg.pojo.User;
 import com.mlxg.service.UserService;
@@ -10,17 +14,21 @@ import com.mlxg.utils.FileUtils;
 import com.mlxg.utils.QRCodeUtils;
 import com.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
-@Service
+@Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private ChatMsgMapper chatMsgMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -36,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FastDFSClient fastDFSClient;
+
+    @Autowired
+    private UserMapperCustom userMapperCustom;
 
     @Override
     public User findUserById(String id) {
@@ -91,4 +102,32 @@ public class UserServiceImpl implements UserService {
         }
         return userList;
     }
+
+    @Override
+    public String saveMsg(ChatMsg chatMsg) {
+        com.mlxg.pojo.ChatMsg msgDB = new com.mlxg.pojo.ChatMsg();
+        String msgId = sid.nextShort();
+        msgDB.setId(msgId);
+        msgDB.setAcceptUserId(chatMsg.getReceiverId());
+        msgDB.setSendUserId(chatMsg.getSenderId());
+        msgDB.setCreateTime(new Date());
+        msgDB.setSignFlag(MsgSignFlagEnum.unsign.type);
+        msgDB.setMsg(chatMsg.getMsg());
+
+        chatMsgMapper.insert(msgDB);
+
+        return msgId;
+    }
+
+    @Override
+    public void updateMsgSigned(List<String> msgIdList) {
+       userMapperCustom.batchUpdateMsgSigned(msgIdList);
+    }
+
+    @Override
+    public List<com.mlxg.pojo.ChatMsg> getUnReadMsgList(String acceptUserId) {
+        List<com.mlxg.pojo.ChatMsg> result = chatMsgMapper.getUnReadMsgListByAcceptUid(acceptUserId);
+        return result;
+    }
+
 }

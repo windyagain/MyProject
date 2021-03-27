@@ -66,8 +66,8 @@ public class UserController {
             user.setNickname("憨皮");
             user.setQrcode("22");
             user.setPassword(MD5Utils.getPwd(user.getPassword()));
-            user.setFaceImage("");
-            user.setFaceImageBig("");
+            user.setFaceImage("M00/00/00/wKgBFWA8PkCALyeIAA7Ql1gJPWg528_150x150.png");
+            user.setFaceImageBig("M00/00/00/wKgBFWA8PkCALyeIAA7Ql1gJPWg528.png");
             dbuser = userService.saveUser(user);
         }
         UserVo userVo = new UserVo();

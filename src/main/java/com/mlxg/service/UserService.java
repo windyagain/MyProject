@@ -1,5 +1,6 @@
 package com.mlxg.service;
 
+import com.mlxg.netty.ChatMsg;
 import com.mlxg.pojo.User;
 
 import java.io.IOException;
@@ -16,4 +17,10 @@ public interface UserService {
     User editUser(User user);
 
     List<User> toGetMyFriends(String userId);
+
+    String saveMsg(ChatMsg chatMsg);
+
+    void updateMsgSigned(List<String> msgIdList);
+
+    List<com.mlxg.pojo.ChatMsg> getUnReadMsgList(String acceptUserId);
 }

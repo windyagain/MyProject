@@ -20,4 +20,8 @@ public interface FriendsRequestMapper {
     List<FriendsRequest> selectMyFriendRequests(String userId);
 
     Integer updateStatus(FriendsRequest record);
+
+    Integer deleteByUniqueKey(FriendsRequest record);
+
+
 }
